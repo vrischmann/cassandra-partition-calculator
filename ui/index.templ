@@ -6,32 +6,32 @@ templ HeaderComponent(title string) {
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>{ title }</title>
 		<link rel="stylesheet" type="text/css" href="/assets/style.css"/>
-		<link rel="shortcut icon" type="image/png" href="/assets/favicon.svg"/>
-		<script async type="text/javascript" src="/assets/htmx.min.js"></script>
-		<script async type="text/javascript" src="/assets/hyperscript.min.js"></script>
+		<script type="text/javascript" src="/assets/htmx.min.js"></script>
+		<script type="text/javascript" src="/assets/hyperscript.min.js"></script>
 	</head>
 }
 
-templ ContentComponent(body templ.Component) {
-	<body class="container">
-		<header>
-			<div id="logo">Moratus</div>
-			<input id="menu-toggle" type="checkbox"/>
-			<label class="menu-button-container" for="menu-toggle">
-				<div class="menu-button"></div>
-			</label>
-			<ul class="main">
-				<li><a href="/">Home</a></li>
-				<li><a href="/feeds">Feeds</a></li>
-				<li><a href="/health">Health</a></li>
-			</ul>
-		</header>
-		<div class="content">
-			{! body }
+templ SchemaComponent(schema string) {
+	<form class="gridv" id="schema" method="POST" action="/evaluate" hx-post="/evaluate" hx-target="#columns" hx-swap="outerHTML" hx-trigger="submit, keyup[ctrlKey&&key=='Enter'] from:body">
+		<div class="gridv schema">
+			<h4>Copy your table schema below to start estimating its size</h4>
+			<textarea name="schema" rows="10" placeholder="Write your CQL schema here">{ schema }</textarea>
 		</div>
-	</body>
+		<div class="inputs"><label for="rows">Estimated number of rows</label> <input type="number" id="rows" name="rows" value="100000"/></div>
+		<input class="submit-button" type="submit" value="Submit"/>
+		<div id="error-messages"></div>
+		<div id="columns"></div>
+	</form>
+	<div id="estimation"></div>
 }
 
-templ Page(title string, body templ.Component) {
-	<html>@HeaderComponent(title)@ContentComponent(body)</html>
+templ MainPage(title string, schema templ.Component) {
+	<!DOCTYPE html>
+	<html>
+		@HeaderComponent(title)
+		<div class="gridv" style="gap: 1em; padding: 1em;">
+			<h1 class="title">Cassandra Partition Calculator</h1>
+			{! schema }
+		</div>
+	</html>
 }
