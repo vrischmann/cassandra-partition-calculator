@@ -1,0 +1,37 @@
+package ui
+
+templ HeaderComponent(title string) {
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>{ title }</title>
+		<link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+		<link rel="shortcut icon" type="image/png" href="/assets/favicon.svg"/>
+		<script async type="text/javascript" src="/assets/htmx.min.js"></script>
+		<script async type="text/javascript" src="/assets/hyperscript.min.js"></script>
+	</head>
+}
+
+templ ContentComponent(body templ.Component) {
+	<body class="container">
+		<header>
+			<div id="logo">Moratus</div>
+			<input id="menu-toggle" type="checkbox"/>
+			<label class="menu-button-container" for="menu-toggle">
+				<div class="menu-button"></div>
+			</label>
+			<ul class="main">
+				<li><a href="/">Home</a></li>
+				<li><a href="/feeds">Feeds</a></li>
+				<li><a href="/health">Health</a></li>
+			</ul>
+		</header>
+		<div class="content">
+			{! body }
+		</div>
+	</body>
+}
+
+templ Page(title string, body templ.Component) {
+	<html>@HeaderComponent(title)@ContentComponent(body)</html>
+}
