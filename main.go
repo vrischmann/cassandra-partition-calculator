@@ -271,7 +271,7 @@ func (c *serveCommandConfig) evaluateHandler(w http.ResponseWriter, req *http.Re
 
 		component := fragments.Results(fragments.ResultsData{
 			Estimation: estimation,
-			Columns:    res.schema.Columns,
+			Schema:     res.schema,
 		})
 		component.Render(req.Context(), w)
 
