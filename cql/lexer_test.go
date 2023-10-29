@@ -38,7 +38,7 @@ loop:
 func TestLexer(t *testing.T) {
 	testCases := []struct {
 		input string
-		exp   []string
+		exp   []token
 	}{
 		{
 			input: `CREATE TABLE events(
@@ -49,7 +49,7 @@ func TestLexer(t *testing.T) {
 				event_data blob,
 				PRIMARY KEY ((tenant_key, user_id, event_category), event_id)
 			);`,
-			exp: []string{
+			exp: []token{
 				"CREATE", "TABLE", "events",
 				"(",
 				"tenant_key", "bigint", ",",
@@ -69,7 +69,7 @@ func TestLexer(t *testing.T) {
 				user_id uuid PRIMARY KEY,
 				event_data blob
 			);`,
-			exp: []string{
+			exp: []token{
 				"CREATE", "TABLE", "events",
 				"(",
 				"user_id", "uuid", "PRIMARY", "KEY", ",",
@@ -83,7 +83,7 @@ func TestLexer(t *testing.T) {
 				user_id uuid PRIMARY KEY,
 				event_data text STATIC
 			);`,
-			exp: []string{
+			exp: []token{
 				"CREATE", "TABLE", "events",
 				"(",
 				"user_id", "uuid", "PRIMARY", "KEY", ",",
@@ -98,7 +98,7 @@ func TestLexer(t *testing.T) {
 				event_data map<int, text>,
 				weights set<double>
 			);`,
-			exp: []string{
+			exp: []token{
 				"CREATE", "TABLE", "events",
 				"(",
 				"user_id", "uuid", "PRIMARY", "KEY", ",",
