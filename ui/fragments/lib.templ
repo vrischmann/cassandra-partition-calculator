@@ -68,6 +68,10 @@ templ Results(data ResultsData) {
 		<pre>{ data.Schema.PrimaryKey.PartitionKey.String() }</pre>
 		<p class="estimation-name">Clustering key</p>
 		<pre>{ data.Schema.PrimaryKey.ClusteringKey.String() }</pre>
+		<p class="estimation-name">Columns</p>
+		<pre>{ strconv.Itoa(len(data.Schema.Columns)) }</pre>
+		<p class="estimation-name">Non partition key columns</p>
+		<pre>{ strconv.Itoa(len(data.Schema.Columns.NotIn(data.Schema.PrimaryKey.Columns()))) }</pre>
 		<p class="estimation-name">Partition values</p>
 		<p class="estimation-value">{ data.Estimation.Values }</p>
 		<p class="estimation-name">Partition size</p>
