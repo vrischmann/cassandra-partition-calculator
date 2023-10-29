@@ -22,12 +22,19 @@ type lexer struct {
 	pos  int
 
 	undoStack []int
+
+	options struct {
+		eatWhitespace bool
+	}
 }
 
 func newLexer(data string) *lexer {
-	return &lexer{
+	l := &lexer{
 		data: data,
 	}
+	l.options.eatWhitespace = true
+
+	return l
 }
 
 func (l *lexer) char() byte   { return l.data[l.pos] }
@@ -58,16 +65,28 @@ func (l *lexer) Undo() {
 }
 
 func (l *lexer) Next() (token, error) {
-	if err := l.eatWhitespace(); err != nil {
-		return "", err
+	if l.pos >= len(l.data) {
+		return "", fmt.Errorf("no more data, err: %w", errEOF)
+	}
+
+	if l.options.eatWhitespace {
+		if err := l.eatWhitespace(); err != nil {
+			return "", err
+		}
 	}
 
 	l.undoStack = append(l.undoStack, l.pos)
+
+	//
 
 	switch ch := l.char(); ch {
 	case '(', ')', '<', '>', ',', ';':
 		l.pos++
 
+		return token(ch), nil
+
+	case '\t', '\n', '\r', ' ':
+		l.pos++
 		return token(ch), nil
 
 	default:

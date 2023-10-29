@@ -181,3 +181,25 @@ func TestLexerAllWhitespace(t *testing.T) {
 	_, err = lexer.Next()
 	require.ErrorIs(t, err, errEOF)
 }
+
+func TestLexerDontEatWhitespace(t *testing.T) {
+	nextEq := func(t testing.TB, lexer *lexer, s token) {
+		token, err := lexer.Next()
+		require.NoError(t, err)
+		require.Equal(t, s, token)
+	}
+
+	lexer := newLexer("user_id foo   bar\nbaz\tqux")
+
+	nextEq(t, lexer, "user_id")
+	nextEq(t, lexer, "foo")
+	nextEq(t, lexer, "bar")
+	lexer.options.eatWhitespace = false
+	nextEq(t, lexer, "\n")
+	nextEq(t, lexer, "baz")
+	nextEq(t, lexer, "\t")
+	nextEq(t, lexer, "qux")
+
+	_, err := lexer.Next()
+	require.ErrorIs(t, err, errEOF)
+}
