@@ -16,7 +16,7 @@ type Estimation struct {
 type ResultsData struct {
 	ErrorMessages []string
 	Estimation Estimation
-	Columns cql.ColumnDefinitions
+	Schema cql.Schema
 }
 
 func columnSizeInputName(name string) string {
@@ -50,7 +50,7 @@ templ Results(data ResultsData) {
 			</tr>
 		</thead>
 		<tbody>
-			for _, column := range data.Columns {
+			for _, column := range data.Schema.Columns {
 			<tr>
 				<td>{ column.Name }</td>
 				<td class="column-type-name">{ column.Type.Name }</td>
@@ -64,6 +64,10 @@ templ Results(data ResultsData) {
 		</tbody>
 	</table>
 	<div id="estimation" hx-swap-oob="outerHTML">
+		<p class="estimation-name">Partition key</p>
+		<pre>{ data.Schema.PrimaryKey.PartitionKey.String() }</pre>
+		<p class="estimation-name">Clustering key</p>
+		<pre>{ data.Schema.PrimaryKey.ClusteringKey.String() }</pre>
 		<p class="estimation-name">Partition values</p>
 		<p class="estimation-value">{ data.Estimation.Values }</p>
 		<p class="estimation-name">Partition size</p>
