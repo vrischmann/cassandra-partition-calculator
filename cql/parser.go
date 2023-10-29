@@ -378,8 +378,39 @@ func (d ColumnDefinitions) FindByName(name string) (ColumnDefinition, bool) {
 type PartitionKey struct {
 	Columns ColumnDefinitions
 }
+
+func (k PartitionKey) String() string {
+	var sb strings.Builder
+	sb.WriteString("(")
+
+	for i, column := range k.Columns {
+		if i > 0 {
+			sb.WriteString(", ")
+		}
+		sb.WriteString(column.Name)
+	}
+
+	sb.WriteString(")")
+	return sb.String()
+}
+
 type ClusteringKey struct {
 	Columns ColumnDefinitions
+}
+
+func (k ClusteringKey) String() string {
+	var sb strings.Builder
+	sb.WriteString("(")
+
+	for i, column := range k.Columns {
+		if i > 0 {
+			sb.WriteString(", ")
+		}
+		sb.WriteString(column.Name)
+	}
+
+	sb.WriteString(")")
+	return sb.String()
 }
 
 type PrimaryKey struct {
