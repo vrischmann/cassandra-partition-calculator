@@ -375,6 +375,16 @@ func (d ColumnDefinitions) FindByName(name string) (ColumnDefinition, bool) {
 	return ColumnDefinition{}, false
 }
 
+func (d ColumnDefinitions) NotIn(other ColumnDefinitions) ColumnDefinitions {
+	res := make(ColumnDefinitions, 0, len(d))
+	for _, cd := range d {
+		if _, ok := other.FindByName(cd.Name); !ok {
+			res = append(res, cd)
+		}
+	}
+	return res
+}
+
 type PartitionKey struct {
 	Columns ColumnDefinitions
 }

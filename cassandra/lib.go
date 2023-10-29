@@ -11,18 +11,6 @@ type Estimation struct {
 	Bytes  int
 }
 
-func columnsNotIn(columns cql.ColumnDefinitions, otherColumns cql.ColumnDefinitions) cql.ColumnDefinitions {
-	var result cql.ColumnDefinitions
-
-	for _, column := range columns {
-		if _, found := otherColumns.FindByName(column.Name); !found {
-			result = append(result, column)
-		}
-	}
-
-	return result
-}
-
 func sumColumnsSize(columns cql.ColumnDefinitions) int64 {
 	var result int64
 
@@ -55,7 +43,7 @@ func Estimate(schema cql.Schema, rows int64) (res Estimation, err error) {
 	partitionKeySize := sumColumnsSize(schema.PrimaryKey.PartitionKey.Columns)
 	clusteringKeySize := sumColumnsSize(schema.PrimaryKey.ClusteringKey.Columns)
 
-	columnsNotInPrimaryKey := columnsNotIn(schema.Columns, schema.PrimaryKey.Columns())
+	columnsNotInPrimaryKey := schema.Columns.NotIn(schema.PrimaryKey.Columns())
 	columnsSize := sumColumnsSize(columnsNotInPrimaryKey)
 
 	rowsSize := (clusteringKeySize + columnsSize) * rows
