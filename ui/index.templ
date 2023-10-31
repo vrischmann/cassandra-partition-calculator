@@ -12,7 +12,7 @@ templ HeaderComponent(baseURL string, title string) {
 }
 
 templ SchemaComponent(baseURL string, schema string) {
-	<form class="gridv" id="schema" method="POST" action={ templ.SafeURL(baseURL) + "/evaluate" } hx-post={ baseURL + "/evaluate" } hx-target="#columns" hx-swap="outerHTML" hx-trigger="submit, keyup[ctrlKey&&key=='Enter'] from:body">
+	<form class="gridv" id="schema" method="POST" action={ templ.SafeURL(baseURL) + "/evaluate" } hx-post={ baseURL + "/evaluate" } hx-target="#columns" hx-swap="outerHTML" hx-trigger="submit, keyup[ctrlKey&amp;&amp;key==&#39;Enter&#39;] from:body">
 		<div class="gridv schema">
 			<h4>Copy your table schema below to start estimating its size</h4>
 			<textarea name="schema" rows="10" placeholder="Write your CQL schema here">{ schema }</textarea>

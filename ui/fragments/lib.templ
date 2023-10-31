@@ -7,16 +7,15 @@ import (
 	"rischmann.fr/cassandra-partition-calculator/cql"
 )
 
-
 type Estimation struct {
 	Values string
-	Bytes string
+	Bytes  string
 }
 
 type ResultsData struct {
 	ErrorMessages []string
-	Estimation Estimation
-	Schema cql.Schema
+	Estimation    Estimation
+	Schema        cql.Schema
 }
 
 func columnSizeInputName(name string) string {
@@ -25,57 +24,53 @@ func columnSizeInputName(name string) string {
 
 templ Results(data ResultsData) {
 	// NOTE(vincent): we need to return the three elements even if we only have errors
-
 	if len(data.ErrorMessages) > 0 {
-	// Only display the error messages
-
-	<div id="error-messages" hx-swap-oob="outerHTML">
-		for _, errorMessage := range data.ErrorMessages {
-			<div class="error-message">{ errorMessage }</div>
-		}
-	</div>
-	<div id="columns"></div>
-	<div id="estimation" hx-swap-oob="outerHTML"></div>
-
-	} else {
-	// Display the columns and the estimation
-
-	<div id="error-messages" hx-swap-oob="outerHTML"></div>
-	<table id="columns">
-		<thead>
-			<tr>
-				<th>Column</th>
-				<th>Type</th>
-				<th>Size</th>
-			</tr>
-		</thead>
-		<tbody>
-			for _, column := range data.Schema.Columns {
-			<tr>
-				<td>{ column.Name }</td>
-				<td class="column-type-name">{ column.Type.Name }</td>
-				if column.Type.IsFixedSize() {
-					<td class="column-type-fixed-size">{ strconv.Itoa(column.Size()) }</td>
-				} else {
-					<td><input class="column-type-dynamic-size" type="number" placeholder="Type your size estimation" name={ columnSizeInputName(column.Name) } value={ strconv.Itoa(column.Size()) } /></td>
-				}
-			</tr>
+		// Only display the error messages
+		<div id="error-messages" hx-swap-oob="outerHTML">
+			for _, errorMessage := range data.ErrorMessages {
+				<div class="error-message">{ errorMessage }</div>
 			}
-		</tbody>
-	</table>
-	<div id="estimation" hx-swap-oob="outerHTML">
-		<p class="estimation-name">Partition key</p>
-		<pre>{ data.Schema.PrimaryKey.PartitionKey.String() }</pre>
-		<p class="estimation-name">Clustering key</p>
-		<pre>{ data.Schema.PrimaryKey.ClusteringKey.String() }</pre>
-		<p class="estimation-name">Columns</p>
-		<pre>{ strconv.Itoa(len(data.Schema.Columns)) }</pre>
-		<p class="estimation-name">Non partition key columns</p>
-		<pre>{ strconv.Itoa(len(data.Schema.Columns.NotIn(data.Schema.PrimaryKey.Columns()))) }</pre>
-		<p class="estimation-name">Partition values</p>
-		<p class="estimation-value">{ data.Estimation.Values }</p>
-		<p class="estimation-name">Partition size</p>
-		<p class="estimation-value">{ data.Estimation.Bytes }</p>
-	</div>
+		</div>
+		<div id="columns"></div>
+		<div id="estimation" hx-swap-oob="outerHTML"></div>
+	} else {
+		// Display the columns and the estimation
+		<div id="error-messages" hx-swap-oob="outerHTML"></div>
+		<table id="columns">
+			<thead>
+				<tr>
+					<th>Column</th>
+					<th>Type</th>
+					<th>Size</th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, column := range data.Schema.Columns {
+					<tr>
+						<td>{ column.Name }</td>
+						<td class="column-type-name">{ column.Type.Name }</td>
+						if column.Type.IsFixedSize() {
+							<td class="column-type-fixed-size">{ strconv.Itoa(column.Size()) }</td>
+						} else {
+							<td><input class="column-type-dynamic-size" type="number" placeholder="Type your size estimation" name={ columnSizeInputName(column.Name) } value={ strconv.Itoa(column.Size()) }/></td>
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+		<div id="estimation" hx-swap-oob="outerHTML">
+			<p class="estimation-name">Partition key</p>
+			<pre>{ data.Schema.PrimaryKey.PartitionKey.String() }</pre>
+			<p class="estimation-name">Clustering key</p>
+			<pre>{ data.Schema.PrimaryKey.ClusteringKey.String() }</pre>
+			<p class="estimation-name">Columns</p>
+			<pre>{ strconv.Itoa(len(data.Schema.Columns)) }</pre>
+			<p class="estimation-name">Non partition key columns</p>
+			<pre>{ strconv.Itoa(len(data.Schema.Columns.NotIn(data.Schema.PrimaryKey.Columns()))) }</pre>
+			<p class="estimation-name">Partition values</p>
+			<p class="estimation-value">{ data.Estimation.Values }</p>
+			<p class="estimation-name">Partition size</p>
+			<p class="estimation-value">{ data.Estimation.Bytes }</p>
+		</div>
 	}
 }
