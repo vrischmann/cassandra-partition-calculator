@@ -112,7 +112,7 @@ func (c *serveCommandConfig) Exec(ctx context.Context, args []string) error {
 
 	c.root.logger.Info("serving UI and API", zap.String("listen_addr", c.listenAddr))
 
-	return http.ListenAndServe(c.listenAddr, mux)
+	return http.ListenAndServe(c.listenAddr, middlewares.Handler(mux))
 }
 
 var errFieldEmpty = errors.New("field empty")
