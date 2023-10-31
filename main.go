@@ -56,12 +56,14 @@ type serveCommandConfig struct {
 	root *rootCommandConfig
 
 	listenAddr string
+	baseURL    string
 }
 
 func newServeCommandConfig(root *rootCommandConfig) *ffcli.Command {
 	cfg := &serveCommandConfig{
 		root:       root,
 		listenAddr: ":8909",
+		baseURL:    "",
 	}
 
 	fs := flag.NewFlagSet("serve", flag.ContinueOnError)
@@ -73,6 +75,7 @@ func newServeCommandConfig(root *rootCommandConfig) *ffcli.Command {
 		cfg.listenAddr = data
 		return nil
 	})
+	fs.StringVar(&cfg.baseURL, "base-url", "", "The base URL of the application")
 
 	return &ffcli.Command{
 		Name:       "serve",
@@ -102,7 +105,7 @@ func (c *serveCommandConfig) Exec(ctx context.Context, args []string) error {
 		// TODO(vincent): stop hardcoding this
 		schema := ui.SchemaComponent(schemaCQL)
 
-		page := ui.MainPage("Cassandra Partition Calculator", schema)
+		page := ui.MainPage(c.baseURL, "Cassandra Partition Calculator", schema)
 		page.Render(req.Context(), w)
 	})
 	mux.HandleFunc("/evaluate", c.evaluateHandler)

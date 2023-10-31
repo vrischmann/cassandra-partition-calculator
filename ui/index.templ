@@ -1,13 +1,13 @@
 package ui
 
-templ HeaderComponent(title string) {
+templ HeaderComponent(baseURL string, title string) {
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>{ title }</title>
-		<link rel="stylesheet" type="text/css" href="/assets/style.css"/>
-		<script type="text/javascript" src="/assets/htmx.min.js"></script>
-		<script type="text/javascript" src="/assets/hyperscript.min.js"></script>
+		<link rel="stylesheet" type="text/css" href={ baseURL +"/assets/style.css" }/>
+		<script type="text/javascript" src={ baseURL + "/assets/htmx.min.js" }></script>
+		<script type="text/javascript" src={ baseURL + "/assets/hyperscript.min.js" }></script>
 	</head>
 }
 
@@ -25,10 +25,10 @@ templ SchemaComponent(schema string) {
 	<div id="estimation"></div>
 }
 
-templ MainPage(title string, schema templ.Component) {
+templ MainPage(baseURL string, title string, schema templ.Component) {
 	<!DOCTYPE html>
 	<html>
-		@HeaderComponent(title)
+		@HeaderComponent(baseURL, title)
 		<div class="gridv" style="gap: 1em; padding: 1em;">
 			<h1 class="title">Cassandra Partition Calculator</h1>
 			{! schema }
