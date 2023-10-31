@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+var Mode = "dev"
+
 func init() {
 	fs := os.DirFS("assets")
 	server := http.FileServer(http.FS(fs))

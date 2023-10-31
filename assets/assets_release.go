@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+var Mode = "release"
+
 //go:embed *.css *.js
 var fs embed.FS
 
