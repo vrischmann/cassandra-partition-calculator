@@ -16,7 +16,7 @@ fmt:
 	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
 	go fmt ./...
 	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
-	go run {{tool_templ}} fmt
+	go run {{tool_templ}} fmt .
 
 watch-gen:
 	watchexec --print-events -f "*.templ" just gen
