@@ -12,6 +12,12 @@ build-release: gen
 	@printf "\x1b[34m===>\x1b[m  Running go build\n"
 	GOOS=linux GOARCH=amd64 go build -tags=release
 
+fmt:
+	@printf "\x1b[34m===>\x1b[m  Running go fmt\n"
+	go fmt ./...
+	@printf "\x1b[34m===>\x1b[m  Running templ fmt\n"
+	go run {{tool_templ}} fmt
+
 watch-gen:
 	watchexec --print-events -f "*.templ" just gen
 
