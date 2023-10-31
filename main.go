@@ -103,14 +103,18 @@ func (c *serveCommandConfig) Exec(ctx context.Context, args []string) error {
 );`
 
 		// TODO(vincent): stop hardcoding this
-		schema := ui.SchemaComponent(schemaCQL)
+		schema := ui.SchemaComponent(c.baseURL, schemaCQL)
 
 		page := ui.MainPage(c.baseURL, "Cassandra Partition Calculator", schema)
 		page.Render(req.Context(), w)
 	})
 	mux.HandleFunc("/evaluate", c.evaluateHandler)
 
-	c.root.logger.Info("serving UI and API", zap.String("listen_addr", c.listenAddr))
+	c.root.logger.Info("serving UI and API",
+		zap.String("listen_addr", c.listenAddr),
+		zap.String("base_url", c.baseURL),
+		zap.String("assets_mode", assets.Mode),
+	)
 
 	return http.ListenAndServe(c.listenAddr, middlewares.Handler(mux))
 }
