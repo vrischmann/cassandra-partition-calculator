@@ -316,7 +316,7 @@ func (t DataType) IsFixedSize() bool {
 	case "uuid", "timeuuid",
 		"timestamp", "int", "bigint",
 		"float", "double",
-		"boolean":
+		"boolean", "tinyint":
 		return true
 	default:
 		return false
@@ -331,7 +331,7 @@ func (t DataType) Size() int {
 		return 8
 	case "float", "int":
 		return 4
-	case "boolean":
+	case "boolean", "tinyint":
 		return 1
 	default:
 		panic(fmt.Errorf("invalid call to Size for a non-fixed size type: %q", t.Name))
