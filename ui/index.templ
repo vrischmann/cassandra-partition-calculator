@@ -5,14 +5,14 @@ templ HeaderComponent(baseURL string, title string) {
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<title>{ title }</title>
-		<link rel="stylesheet" type="text/css" href={ baseURL +"/assets/style.css" }/>
+		<link rel="stylesheet" type="text/css" href={ baseURL + "/assets/style.css" }/>
 		<script type="text/javascript" src={ baseURL + "/assets/htmx.min.js" }></script>
 		<script type="text/javascript" src={ baseURL + "/assets/hyperscript.min.js" }></script>
 	</head>
 }
 
 templ SchemaComponent(baseURL string, schema string) {
-	<form class="gridv" id="schema" method="POST" action={ templ.SafeURL(baseURL) + "/evaluate" } hx-post={ baseURL + "/evaluate" } hx-target="#columns" hx-swap="outerHTML" hx-trigger="submit, keyup[ctrlKey&amp;&amp;key==&#39;Enter&#39;] from:body">
+	<form class="gridv" id="schema" method="POST" action={ templ.SafeURL(baseURL) + "/evaluate" } hx-post={ baseURL + "/evaluate" } hx-target="#columns" hx-swap="outerHTML" hx-trigger="submit, keyup[ctrlKey&&key=='Enter'] from:body">
 		<div class="gridv schema">
 			<h4>Copy your table schema below to start estimating its size</h4>
 			<textarea name="schema" rows="10" placeholder="Write your CQL schema here">{ schema }</textarea>
@@ -31,7 +31,7 @@ templ MainPage(baseURL string, title string, schema templ.Component) {
 		@HeaderComponent(baseURL, title)
 		<div class="gridv" style="gap: 1em; padding: 1em;">
 			<h1 class="title">Cassandra Partition Calculator</h1>
-			{! schema }
+			@schema
 		</div>
 	</html>
 }
