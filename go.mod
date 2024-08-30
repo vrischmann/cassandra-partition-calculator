@@ -3,7 +3,7 @@ module rischmann.fr/cassandra-partition-calculator
 go 1.21.0
 
 require (
-	github.com/a-h/templ v0.2.747
+	github.com/a-h/templ v0.2.771
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dustin/go-humanize v1.0.1
 	github.com/peterbourgon/ff/v3 v3.4.0
